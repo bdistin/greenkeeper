@@ -20,6 +20,14 @@ describe('github-event status', async () => {
     jest.resetModules()
   })
 
+  afterAll(async () => {
+    const { repositories, installations } = await dbs()
+    await Promise.all([
+      removeIfExists(installations, '10'),
+      removeIfExists(repositories, '42:branch:deadbeef', '43:branch:deadbeef', '44:branch:deadbeef', '44:pr:1234')
+    ])
+  })
+
   test('initial pr', async () => {
     const { repositories } = await dbs()
     expect.assertions(6)
@@ -179,13 +187,5 @@ describe('github-event status', async () => {
       }
     })
     expect(newJob).toBeFalsy()
-  })
-
-  afterAll(async () => {
-    const { repositories, installations } = await dbs()
-    await Promise.all([
-      removeIfExists(installations, '10'),
-      removeIfExists(repositories, '42:branch:deadbeef', '43:branch:deadbeef', '44:branch:deadbeef', '44:pr:1234')
-    ])
   })
 })

@@ -5,6 +5,16 @@ const dbs = require('../../../../lib/dbs')
 const removeIfExists = require('../../../helpers/remove-if-exists')
 const createInstallation = require('../../../../jobs/github-event/installation/created')
 
+afterAll(async () => {
+  const { installations, repositories } = await dbs()
+
+  await Promise.all([
+    removeIfExists(installations, '2'),
+    removeIfExists(repositories, '123', '234')
+  ])
+  require('../../../../lib/statsd').close()
+})
+
 test('github-event installation created', async () => {
   const { installations, repositories } = await dbs()
 
@@ -73,14 +83,4 @@ test('github-event installation created', async () => {
   expect(doc.installation).toBe(1)
   expect(doc.login).toBe('bar')
   expect(doc.type).toBe('baz')
-})
-
-afterAll(async () => {
-  const { installations, repositories } = await dbs()
-
-  await Promise.all([
-    removeIfExists(installations, '2'),
-    removeIfExists(repositories, '123', '234')
-  ])
-  require('../../../../lib/statsd').close()
 })

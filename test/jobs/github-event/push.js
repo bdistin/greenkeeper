@@ -9,6 +9,26 @@ const { cleanCache, requireFresh } = require('../../helpers/module-cache-helpers
 const pathToWorker = require.resolve('../../../jobs/github-event/push')
 jest.setTimeout(10000)
 
+afterAll(async () => {
+  const { repositories, payments } = await dbs()
+
+  await removeIfExists(repositories, '444', '444A', '445', '445A', '446', '447', '448', '444:branch:1234abcd', '444:branch:1234abce', '444A:branch:1234abcd', '444A:branch:1234abce', '555', '666',
+  '777', '777:branch:1234abcd', '777:branch:1234abce', '777:branch:1234abcf', '777:branch:1234abcg',
+  '777A', '777A:branch:1234abca', '777A:branch:1234abcb', '777A:branch:1234abcc',
+  '888', '888:branch:1234abca', '888:branch:1234abcb',
+  '999', '999:branch:1234abca', '999:branch:1234abcb',
+  '1111',
+  '1112', '1112:branch:1234abca', '1112:branch:1234abcb',
+  '1113', '1113:branch:1234abca', '1113:branch:1234abcb',
+  '1114', '1114:branch:1234abca', '1114:branch:1234abcb',
+  '1115', '1115:branch:1234abca', '1115:branch:1234abcb',
+  '1116', '1116:branch:1234abca', '1116:branch:1234abcb',
+  '1117', '1117:branch:1234abca',
+  '1118', '1118:branch:1234abca',
+  'mga1', 'mga2', 'mga3', 'mgm1', 'mgm2', 'mgm3')
+  await removeIfExists(payments, '123')
+})
+
 describe('github-event push', async () => {
   beforeEach(() => {
     jest.resetModules()
@@ -4013,26 +4033,6 @@ describe('github-event push: monorepo', () => {
     expect(repo.greenkeeper).toMatchObject(configFileContent)
     expect(repo.headSha).toEqual('9049f1265b7d61be4a8904a9a27120d2064dab3b')
   })
-})
-
-afterAll(async () => {
-  const { repositories, payments } = await dbs()
-
-  await removeIfExists(repositories, '444', '444A', '445', '445A', '446', '447', '448', '444:branch:1234abcd', '444:branch:1234abce', '444A:branch:1234abcd', '444A:branch:1234abce', '555', '666',
-  '777', '777:branch:1234abcd', '777:branch:1234abce', '777:branch:1234abcf', '777:branch:1234abcg',
-  '777A', '777A:branch:1234abca', '777A:branch:1234abcb', '777A:branch:1234abcc',
-  '888', '888:branch:1234abca', '888:branch:1234abcb',
-  '999', '999:branch:1234abca', '999:branch:1234abcb',
-  '1111',
-  '1112', '1112:branch:1234abca', '1112:branch:1234abcb',
-  '1113', '1113:branch:1234abca', '1113:branch:1234abcb',
-  '1114', '1114:branch:1234abca', '1114:branch:1234abcb',
-  '1115', '1115:branch:1234abca', '1115:branch:1234abcb',
-  '1116', '1116:branch:1234abca', '1116:branch:1234abcb',
-  '1117', '1117:branch:1234abca',
-  '1118', '1118:branch:1234abca',
-  'mga1', 'mga2', 'mga3', 'mgm1', 'mgm2', 'mgm3')
-  await removeIfExists(payments, '123')
 })
 
 function encodePkg (pkg) {
